@@ -1,0 +1,154 @@
+:root {
+  --bg: #0f1115;
+  --panel: #151821;
+  --panel-2: #1c2230;
+  --text: #e6e8ee;
+  --muted: #9aa3b2;
+  --accent: #ffcc4d;
+  --green: #36d399;
+  --red: #ff6b6b;
+  --blue: #4c9ffe;
+  --border: #2a2f3a;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.app {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: 100vh;
+}
+
+.sidebar {
+  background: #0b0d12;
+  border-right: 1px solid var(--border);
+  padding: 16px;
+}
+
+.logo {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.user-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 16px;
+  font-size: 12px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.nav-item.active {
+  background: var(--panel-2);
+  color: var(--text);
+}
+
+.content {
+  padding: 16px 20px;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tab {
+  padding: 6px 10px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.tab.active {
+  color: var(--text);
+  border-color: var(--blue);
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  margin-top: 12px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.table th, .table td {
+  padding: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.tag {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  background: var(--panel-2);
+}
+
+.tag.red { background: rgba(255, 107, 107, 0.2); color: var(--red); }
+.tag.green { background: rgba(54, 211, 153, 0.2); color: var(--green); }
+.tag.blue { background: rgba(76, 159, 254, 0.2); color: var(--blue); }
+
+.float-right {
+  position: fixed;
+  right: 16px;
+  top: 140px;
+  display: grid;
+  gap: 8px;
+}
+
+.float-btn {
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-size: 12px;
+  text-align: center;
+}
+
+.footer-bar {
+  position: fixed;
+  left: 240px;
+  right: 0;
+  bottom: 0;
+  background: #0b0d12;
+  border-top: 1px solid var(--border);
+  padding: 6px 12px;
+  font-size: 12px;
+  color: var(--muted);
+}

@@ -1,0 +1,11 @@
+# python
+__pycache__/
+*.pyc
+.env
+
+# node
+node_modules/
+dist/
+
+# local
+.private/
