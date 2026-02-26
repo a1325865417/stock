@@ -1,22 +1,33 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { navItems } from "../lib/nav";
+import { useTask } from "../lib/task";
+
+function formatNow() {
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = String(now.getMonth() + 1).padStart(2, "0");
+  const d = String(now.getDate()).padStart(2, "0");
+  const h = String(now.getHours()).padStart(2, "0");
+  const min = String(now.getMinutes()).padStart(2, "0");
+  return `${y}-${m}-${d} ${h}:${min}`;
+}
 
 export default function Layout({ children }) {
+  const { data: task } = useTask();
+  const online = task?.online;
+  const notice = task?.notice?.index?.banner || task?.notice?.index?.title;
+
   return (
     <div className="app">
       <aside className="sidebar">
         <div className="logo">VIP复盘网</div>
         <div className="user-card">
-          <div>VIP 1</div>
-          <div>ID：138518</div>
-          <div>昵称：打电话哈</div>
-          <div>余额：0 元</div>
-          <div>签到：未签到</div>
-          <div>VIP软件：13 天</div>
-          <div>通达信：未参与</div>
-          <div>策略卡：0 次</div>
-          <div>市场：交易中</div>
+          <div className="user-title">VIP 1 · 打电话哈</div>
+          <div className="user-line">ID：138518 · 余额：0 元</div>
+          <div className="user-line">签到：未签到 · 策略卡：0 次</div>
+          <div className="user-line">VIP软件：13 天 · 通达信：未参与</div>
+          <div className="user-line">市场：交易中</div>
         </div>
         {navItems.map((item) => (
           <NavLink
@@ -28,9 +39,7 @@ export default function Layout({ children }) {
             }
           >
             <span>{item.label}</span>
-            <span style={{ marginLeft: "auto", fontSize: 10, color: "#6b7280" }}>
-              {item.subtitle}
-            </span>
+            <span className="nav-subtitle">{item.subtitle}</span>
           </NavLink>
         ))}
       </aside>
@@ -39,7 +48,10 @@ export default function Layout({ children }) {
         <div className="topbar">
           <div className="topbar-left">
             <span className="pill">市场：交易中</span>
-            <span className="muted">2026-02-26 13:38</span>
+            <span className="muted">{formatNow()}</span>
+            {online?.show && (
+              <span className="pill ghost">在线 {online.num}</span>
+            )}
           </div>
           <div className="topbar-actions">
             <div className="icon-btn">全屏</div>
@@ -49,6 +61,9 @@ export default function Layout({ children }) {
             <div className="icon-btn">搜索</div>
           </div>
         </div>
+        {notice && (
+          <div className="headline" dangerouslySetInnerHTML={{ __html: notice }} />
+        )}
         {children}
       </main>
 
@@ -59,7 +74,8 @@ export default function Layout({ children }) {
       </div>
 
       <div className="footer-bar">
-        当前在线人数：-- ｜ 公告：VIP复盘网“2026年度新春优惠”活动启动...
+        当前在线人数：{online?.num ?? "--"} ｜ 公告：
+        {task?.soft?.notice || "VIP复盘网“2026年度新春优惠”活动启动..."}
       </div>
     </div>
   );

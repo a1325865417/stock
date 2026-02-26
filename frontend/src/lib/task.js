@@ -1,0 +1,44 @@
+import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { fetchJson } from "./api";
+
+const TaskContext = createContext({
+  data: null,
+  loading: true,
+  error: null,
+});
+
+export function TaskProvider({ children }) {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+    fetchJson("/api/config/task")
+      .then((payload) => {
+        if (!active) return;
+        setData(payload);
+        setError(null);
+      })
+      .catch((err) => {
+        if (!active) return;
+        setError(err);
+      })
+      .finally(() => {
+        if (!active) return;
+        setLoading(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const value = useMemo(() => ({ data, loading, error }), [data, loading, error]);
+
+  return <TaskContext.Provider value={value}>{children}</TaskContext.Provider>;
+}
+
+export function useTask() {
+  return useContext(TaskContext);
+}

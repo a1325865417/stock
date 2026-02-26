@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTask } from "../lib/task";
 
 const tabs = [
   "VIP商城",
@@ -39,6 +40,8 @@ const cardRows = [
 
 export default function Vip() {
   const [active, setActive] = useState(tabs[0]);
+  const { data: task } = useTask();
+  const promo = task?.youhui;
 
   return (
     <>
@@ -58,41 +61,69 @@ export default function Vip() {
       </div>
 
       {active === "VIP商城" && (
-        <div className="panel">
-          <table className="table">
-            <thead>
-              <tr>
-                <th>套餐</th>
-                <th>价格</th>
-                <th>权益</th>
-              </tr>
-            </thead>
-            <tbody>
-              {plans.map((row) => (
-                <tr key={row.name}>
-                  <td>{row.name}</td>
-                  <td className="tag red">{row.price}</td>
-                  <td>{row.perks}</td>
+        <>
+          <div className="panel">
+            <div className="section-title">精选套餐</div>
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>套餐</th>
+                  <th>价格</th>
+                  <th>权益</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {plans.map((row) => (
+                  <tr key={row.name}>
+                    <td>{row.name}</td>
+                    <td className="tag red">{row.price}</td>
+                    <td>{row.perks}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {promo?.show && (
+            <div className="panel">
+              <div className="section-title">限时优惠</div>
+              <div className="note" dangerouslySetInnerHTML={{ __html: promo.youhui1 }} />
+              {promo.youhui_pic && (
+                <div className="media-box" style={{ marginTop: 10 }}>
+                  <img src={promo.youhui_pic} alt="优惠活动" />
+                </div>
+              )}
+            </div>
+          )}
+        </>
       )}
 
       {active === "会员信息" && (
         <div className="panel">
-          <div style={{ display: "grid", gap: 6, fontSize: 12 }}>
-            <div>会员等级：VIP 1</div>
-            <div>会员到期：2026-05-26</div>
-            <div>策略卡次数：0 次</div>
-            <div>签到状态：未签到</div>
+          <div className="section-title">会员信息</div>
+          <div className="stat-grid">
+            <div className="stat-card">
+              <div className="stat-label">会员等级</div>
+              <div className="stat-value">VIP 1</div>
+            </div>
+            <div className="stat-card">
+              <div className="stat-label">会员到期</div>
+              <div className="stat-value">2026-05-26</div>
+            </div>
+            <div className="stat-card">
+              <div className="stat-label">策略卡次数</div>
+              <div className="stat-value">0 次</div>
+            </div>
+            <div className="stat-card">
+              <div className="stat-label">签到状态</div>
+              <div className="stat-value">未签到</div>
+            </div>
           </div>
         </div>
       )}
 
       {active === "在线充值" && (
         <div className="panel">
+          <div className="section-title">快速充值</div>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
             {rechargeRows.map((row) => (
               <div key={row.amount} className="tag" style={{ padding: "8px 12px" }}>
@@ -131,25 +162,24 @@ export default function Vip() {
 
       {active === "个人资料" && (
         <div className="panel">
-          <div style={{ display: "grid", gap: 6, fontSize: 12 }}>
-            <div>昵称：打电话哈</div>
-            <div>手机号：已绑定</div>
-            <div>邮箱：未绑定</div>
+          <div className="section-title">个人资料</div>
+          <div className="note">
+            昵称：打电话哈<br />
+            手机号：已绑定<br />
+            邮箱：未绑定
           </div>
         </div>
       )}
 
       {active === "修改密码" && (
         <div className="panel">
-          <div style={{ fontSize: 12, color: "#9aa3b2" }}>
-            请在此处输入旧密码与新密码完成修改。
-          </div>
+          <div className="note">请在此处输入旧密码与新密码完成修改。</div>
         </div>
       )}
 
       {active === "常见问题" && (
         <div className="panel">
-          <div style={{ fontSize: 12, color: "#9aa3b2", lineHeight: 1.6 }}>
+          <div className="note">
             Q1：策略卡可以提现吗？<br />
             A1：策略卡为虚拟商品，不支持退款。<br />
             Q2：会员权益如何升级？<br />
@@ -160,17 +190,13 @@ export default function Vip() {
 
       {active === "VIP基础版" && (
         <div className="panel">
-          <div style={{ fontSize: 12, color: "#9aa3b2" }}>
-            包含盘前情报、策略提醒与基础榜单功能。
-          </div>
+          <div className="note">包含盘前情报、策略提醒与基础榜单功能。</div>
         </div>
       )}
 
       {active === "通达信增值版" && (
         <div className="panel">
-          <div style={{ fontSize: 12, color: "#9aa3b2" }}>
-            包含基础版权益 + 通达信插件与专属策略。
-          </div>
+          <div className="note">包含基础版权益 + 通达信插件与专属策略。</div>
         </div>
       )}
 
@@ -199,9 +225,7 @@ export default function Vip() {
 
       {active === "合伙人权益" && (
         <div className="panel">
-          <div style={{ fontSize: 12, color: "#9aa3b2" }}>
-            享有专属客服、返佣权益与活动优先参与资格。
-          </div>
+          <div className="note">享有专属客服、返佣权益与活动优先参与资格。</div>
         </div>
       )}
 
@@ -230,9 +254,11 @@ export default function Vip() {
 
       {active === "优惠活动" && (
         <div className="panel">
-          <div style={{ fontSize: 12, color: "#9aa3b2" }}>
-            VIP复盘网新春优惠，开通年度会员享折扣。
-          </div>
+          {promo?.show ? (
+            <div className="note" dangerouslySetInnerHTML={{ __html: promo.youhui1 }} />
+          ) : (
+            <div className="note">VIP复盘网新春优惠，开通年度会员享折扣。</div>
+          )}
         </div>
       )}
     </>

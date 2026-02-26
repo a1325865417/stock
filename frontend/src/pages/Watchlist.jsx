@@ -1,12 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import { fetchJson } from "../lib/api";
 
 const tabs = ["我的自选", "条件提醒", "策略跟踪"];
 
-const watchRows = [
-  { name: "中科曙光", price: "42.18", change: "+2.1%", status: "观察" },
-  { name: "埃斯顿", price: "15.72", change: "-0.8%", status: "跟踪" },
-  { name: "中直股份", price: "36.40", change: "+3.4%", status: "关注" },
-];
+const watchCodes = ["600410", "300442", "002378"];
 
 const alertRows = [
   { name: "中科曙光", rule: "涨幅>5%", status: "触发" },
@@ -20,6 +17,14 @@ const trackRows = [
 
 export default function Watchlist() {
   const [active, setActive] = useState(tabs[0]);
+  const [quotes, setQuotes] = useState([]);
+  const codes = useMemo(() => watchCodes.join(","), []);
+
+  useEffect(() => {
+    fetchJson(`/api/market/quotes?codes=${codes}`)
+      .then((data) => setQuotes(data))
+      .catch(() => setQuotes([]));
+  }, [codes]);
 
   return (
     <>
@@ -44,20 +49,26 @@ export default function Watchlist() {
             <thead>
               <tr>
                 <th>股票</th>
+                <th>代码</th>
                 <th>最新价</th>
                 <th>涨跌</th>
-                <th>状态</th>
+                <th>涨幅</th>
+                <th>换手</th>
               </tr>
             </thead>
             <tbody>
-              {watchRows.map((row) => (
-                <tr key={row.name}>
-                  <td>{row.name}</td>
-                  <td>{row.price}</td>
-                  <td className={row.change.startsWith("+") ? "tag red" : "tag green"}>
-                    {row.change}
+              {quotes.map((row) => (
+                <tr key={row.code}>
+                  <td>{row.name || "-"}</td>
+                  <td>{row.code}</td>
+                  <td>{row.price ?? "-"}</td>
+                  <td className={row.change >= 0 ? "tag red" : "tag green"}>
+                    {row.change ?? "-"}
                   </td>
-                  <td className="tag blue">{row.status}</td>
+                  <td className={row.change_rate >= 0 ? "tag red" : "tag green"}>
+                    {row.change_rate ?? "-"}%
+                  </td>
+                  <td>{row.turnover_ratio ?? "-"}%</td>
                 </tr>
               ))}
             </tbody>
