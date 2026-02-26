@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTask } from "../lib/task";
 
 const tabs = ["AI操盘策略", "专家复盘策略"];
 
@@ -58,6 +59,8 @@ const expertRows = [
 
 export default function Strategies() {
   const [active, setActive] = useState(tabs[0]);
+  const { data: task } = useTask();
+  const plan = task?.plan || {};
 
   return (
     <>
@@ -74,6 +77,17 @@ export default function Strategies() {
           ))}
         </div>
         <div>策略中心</div>
+      </div>
+
+      <div className="panel">
+        <div className="section-title">今日策略计划</div>
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+          <span className={plan?.jingjia ? "tag red" : "tag ghost"}>竞价策略</span>
+          <span className={plan?.panzhong ? "tag red" : "tag ghost"}>盘中策略</span>
+          <span className={plan?.fupan ? "tag red" : "tag ghost"}>复盘策略</span>
+          <span className={plan?.open_plan ? "tag blue" : "tag ghost"}>计划状态</span>
+          <span className="tag gold">AI策略卡：0 次</span>
+        </div>
       </div>
 
       {active === "AI操盘策略" && (

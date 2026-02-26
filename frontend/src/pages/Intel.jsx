@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTask } from "../lib/task";
 
 const tabs = [
   "大盘直播",
@@ -58,9 +59,26 @@ const tabRows = {
 
 export default function Intel() {
   const [active, setActive] = useState(tabs[0]);
+  const { data: task } = useTask();
+  const notice = task?.notice?.index?.banner || task?.notice?.index?.title;
+  const about = task?.base?.about;
 
   return (
     <>
+      {notice && (
+        <div className="panel">
+          <div className="section-title">重要公告</div>
+          <div className="note" dangerouslySetInnerHTML={{ __html: notice }} />
+        </div>
+      )}
+
+      {about && (
+        <div className="panel">
+          <div className="section-title">平台说明</div>
+          <div className="note" dangerouslySetInnerHTML={{ __html: about }} />
+        </div>
+      )}
+
       <div className="toolbar">
         <div className="tabs">
           {tabs.map((t) => (

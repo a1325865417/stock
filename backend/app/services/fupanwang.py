@@ -85,9 +85,15 @@ class FupanwangClient:
     def get_task_summary(self) -> dict[str, Any]:
         task = self.fetch_task()
         stock = task.get("stock") or {}
+        base = task.get("base") or {}
         return {
             "kefu_pic": task.get("kefu_pic"),
-            "base": task.get("base"),
+            "base": {
+                **base,
+                "about": self._strip_scripts(base.get("about")),
+            },
+            "plan": task.get("plan"),
+            "message": task.get("message"),
             "soft": task.get("soft"),
             "youhui": {
                 **(task.get("youhui") or {}),

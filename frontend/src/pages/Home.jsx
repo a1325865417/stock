@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import { fetchJson } from "../lib/api";
+import { useTask } from "../lib/task";
 
 const tabs = [
   "盘面必看",
@@ -104,10 +106,50 @@ const tabTables = {
 
 export default function Home() {
   const [active, setActive] = useState(tabs[0]);
+  const { data: task } = useTask();
+  const plan = task?.plan || {};
+  const hotCodes = useMemo(() => (task?.stock?.lhbs || []).slice(0, 6), [task]);
+  const [hotQuotes, setHotQuotes] = useState([]);
+
+  useEffect(() => {
+    if (!hotCodes.length) return;
+    fetchJson(`/api/market/quotes?codes=${hotCodes.join(",")}`)
+      .then((data) => setHotQuotes(data))
+      .catch(() => setHotQuotes([]));
+  }, [hotCodes]);
+
   const table = tabTables[active];
 
   return (
     <>
+      <div className="panel">
+        <div className="section-title">市场摘要</div>
+        <div className="stat-grid">
+          <div className="stat-card">
+            <div className="stat-label">在线人数</div>
+            <div className="stat-value">{task?.online?.num ?? "--"}</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-label">VIP客户端</div>
+            <div className="stat-value">{task?.soft?.version || "--"}</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-label">策略计划</div>
+            <div className="stat-value">{plan?.open_plan ? "已开启" : "待开启"}</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-label">行情源</div>
+            <div className="stat-value">公开行情</div>
+          </div>
+        </div>
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 10 }}>
+          <span className={plan?.jingjia ? "tag red" : "tag ghost"}>竞价策略</span>
+          <span className={plan?.panzhong ? "tag red" : "tag ghost"}>盘中策略</span>
+          <span className={plan?.fupan ? "tag red" : "tag ghost"}>复盘策略</span>
+          <span className="tag gold">AI策略卡：可用 0 次</span>
+        </div>
+      </div>
+
       <div className="toolbar">
         <div className="tabs">
           {tabs.map((t) => (
@@ -153,6 +195,43 @@ export default function Home() {
                 })}
               </tr>
             ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="panel">
+        <div className="section-title">热门行情</div>
+        <table className="table">
+          <thead>
+            <tr>
+              <th>代码</th>
+              <th>股票</th>
+              <th>最新价</th>
+              <th>涨跌</th>
+              <th>涨幅</th>
+            </tr>
+          </thead>
+          <tbody>
+            {hotQuotes.map((row) => (
+              <tr key={row.code}>
+                <td>{row.code}</td>
+                <td>{row.name || "-"}</td>
+                <td>{row.price ?? "-"}</td>
+                <td className={row.change >= 0 ? "tag red" : "tag green"}>
+                  {row.change ?? "-"}
+                </td>
+                <td className={row.change_rate >= 0 ? "tag red" : "tag green"}>
+                  {row.change_rate ?? "-"}%
+                </td>
+              </tr>
+            ))}
+            {hotQuotes.length === 0 && (
+              <tr>
+                <td colSpan={5} className="note">
+                  暂无数据，请稍后刷新。
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
