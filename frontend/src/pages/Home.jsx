@@ -125,6 +125,11 @@ export default function Home() {
 
       <div className="panel">
         <div style={{ marginBottom: 8 }}>AI策略卡：可用 0 次</div>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 10 }}>
+          <span className="tag blue">点击购买AI策略次卡</span>
+          <span className="tag">点击查看AI历史策略</span>
+          <span className="tag">仅供模拟学习</span>
+        </div>
         <table className="table">
           <thead>
             <tr>
