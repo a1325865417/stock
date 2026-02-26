@@ -5,7 +5,12 @@ import Home from "./pages/Home.jsx";
 import Strategies from "./pages/Strategies.jsx";
 import Intel from "./pages/Intel.jsx";
 import Popularity from "./pages/Popularity.jsx";
-import Placeholder from "./pages/Placeholder.jsx";
+import Partner from "./pages/Partner.jsx";
+import Downloads from "./pages/Downloads.jsx";
+import Review from "./pages/Review.jsx";
+import Lhb from "./pages/Lhb.jsx";
+import Watchlist from "./pages/Watchlist.jsx";
+import Vip from "./pages/Vip.jsx";
 
 export default function App() {
   return (
@@ -16,12 +21,12 @@ export default function App() {
           <Route path="/strategies" element={<Strategies />} />
           <Route path="/intel" element={<Intel />} />
           <Route path="/popularity" element={<Popularity />} />
-          <Route path="/partner" element={<Placeholder title="分享赚钱" />} />
-          <Route path="/downloads" element={<Placeholder title="软件下载" />} />
-          <Route path="/review" element={<Placeholder title="复盘啦" />} />
-          <Route path="/lhb" element={<Placeholder title="龙虎榜" />} />
-          <Route path="/watchlist" element={<Placeholder title="自选股" />} />
-          <Route path="/vip" element={<Placeholder title="会员中心" />} />
+          <Route path="/partner" element={<Partner />} />
+          <Route path="/downloads" element={<Downloads />} />
+          <Route path="/review" element={<Review />} />
+          <Route path="/lhb" element={<Lhb />} />
+          <Route path="/watchlist" element={<Watchlist />} />
+          <Route path="/vip" element={<Vip />} />
         </Routes>
       </Layout>
     </BrowserRouter>

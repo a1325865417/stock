@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 const tabs = [
   "VIP人气榜",
@@ -11,19 +11,54 @@ const tabs = [
   "财联社人气榜",
 ];
 
-const rows = [
-  { rank: 1, name: "航天发展", change: "2.04%", tags: ["亏", "R", "榜"] },
-  { rank: 2, name: "华胜天成", change: "10.00%", tags: ["R", "榜"] },
-  { rank: 3, name: "润泽科技", change: "18.19%", tags: ["R", "创"] },
-];
+const tabRows = {
+  VIP人气榜: [
+    { rank: 1, name: "航天发展", change: "2.04%", tags: ["R", "榜"] },
+    { rank: 2, name: "华胜天成", change: "10.00%", tags: ["R", "榜"] },
+  ],
+  同花顺人气榜: [
+    { rank: 1, name: "润泽科技", change: "18.19%", tags: ["创"] },
+    { rank: 2, name: "中科曙光", change: "5.30%", tags: ["热"] },
+  ],
+  同花顺24小时榜: [
+    { rank: 1, name: "中直股份", change: "4.10%", tags: ["热"] },
+    { rank: 2, name: "埃斯顿", change: "3.80%", tags: ["强"] },
+  ],
+  开盘啦盘中榜: [
+    { rank: 1, name: "华胜天成", change: "10.00%", tags: ["榜"] },
+    { rank: 2, name: "航天发展", change: "2.04%", tags: ["R"] },
+  ],
+  开盘啦复盘榜: [
+    { rank: 1, name: "润泽科技", change: "18.19%", tags: ["创"] },
+    { rank: 2, name: "中科曙光", change: "5.30%", tags: ["热"] },
+  ],
+  东财人气榜: [
+    { rank: 1, name: "中科曙光", change: "5.30%", tags: ["热"] },
+    { rank: 2, name: "中直股份", change: "4.10%", tags: ["强"] },
+  ],
+  淘股吧人气榜: [
+    { rank: 1, name: "埃斯顿", change: "3.80%", tags: ["强"] },
+    { rank: 2, name: "华胜天成", change: "10.00%", tags: ["榜"] },
+  ],
+  财联社人气榜: [
+    { rank: 1, name: "航天发展", change: "2.04%", tags: ["R"] },
+    { rank: 2, name: "润泽科技", change: "18.19%", tags: ["创"] },
+  ],
+};
 
 export default function Popularity() {
+  const [active, setActive] = useState(tabs[0]);
+
   return (
     <>
       <div className="toolbar">
         <div className="tabs">
-          {tabs.map((t, i) => (
-            <div key={t} className={`tab ${i === 0 ? "active" : ""}`}>
+          {tabs.map((t) => (
+            <div
+              key={t}
+              className={`tab ${t === active ? "active" : ""}`}
+              onClick={() => setActive(t)}
+            >
               {t}
             </div>
           ))}
@@ -42,8 +77,8 @@ export default function Popularity() {
             </tr>
           </thead>
           <tbody>
-            {rows.map((row) => (
-              <tr key={row.rank}>
+            {tabRows[active].map((row) => (
+              <tr key={`${active}-${row.rank}`}>
                 <td>{row.rank}</td>
                 <td>{row.name}</td>
                 <td>{row.change}</td>
