@@ -13,6 +13,12 @@ const tabs = [
   "股票榜",
 ];
 
+const hotRows = [
+  { name: "航天发展", change: "2.04%", tags: ["R", "榜"] },
+  { name: "华胜天成", change: "10.00%", tags: ["R", "榜"] },
+  { name: "润泽科技", change: "18.19%", tags: ["R", "创"] },
+];
+
 const tabTables = {
   盘面必看: {
     columns: ["标题", "关联板块", "热度", "更新时间"],
@@ -140,6 +146,36 @@ export default function Home() {
                   }
                   return <td key={index}>{cell}</td>;
                 })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="panel">
+        <div style={{ marginBottom: 8 }}>人气TOP10</div>
+        <table className="table">
+          <thead>
+            <tr>
+              <th>排名</th>
+              <th>股票</th>
+              <th>涨跌</th>
+              <th>标签</th>
+            </tr>
+          </thead>
+          <tbody>
+            {hotRows.map((row, index) => (
+              <tr key={row.name}>
+                <td>{index + 1}</td>
+                <td>{row.name}</td>
+                <td>{row.change}</td>
+                <td>
+                  {row.tags.map((tag) => (
+                    <span key={tag} className="tag blue" style={{ marginRight: 6 }}>
+                      {tag}
+                    </span>
+                  ))}
+                </td>
               </tr>
             ))}
           </tbody>

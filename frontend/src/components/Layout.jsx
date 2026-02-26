@@ -35,7 +35,22 @@ export default function Layout({ children }) {
         ))}
       </aside>
 
-      <main className="content">{children}</main>
+      <main className="content">
+        <div className="topbar">
+          <div className="topbar-left">
+            <span className="pill">市场：交易中</span>
+            <span className="muted">2026-02-26 13:38</span>
+          </div>
+          <div className="topbar-actions">
+            <div className="icon-btn">全屏</div>
+            <div className="icon-btn">主题</div>
+            <div className="icon-btn">+</div>
+            <div className="icon-btn">客服</div>
+            <div className="icon-btn">搜索</div>
+          </div>
+        </div>
+        {children}
+      </main>
 
       <div className="float-right">
         <div className="float-btn">VIP</div>
