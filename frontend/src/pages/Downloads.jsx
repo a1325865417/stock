@@ -16,6 +16,7 @@ export default function Downloads() {
   const { data: task } = useTask();
   const soft = task?.soft;
   const app = task?.app;
+  const updateLog = app?.log;
 
   const downloadRows = [
     {
@@ -83,6 +84,13 @@ export default function Downloads() {
               </div>
             </div>
           </div>
+
+          {updateLog && (
+            <div className="panel">
+              <div className="section-title">更新日志</div>
+              <div className="note" dangerouslySetInnerHTML={{ __html: updateLog }} />
+            </div>
+          )}
 
           <div className="panel">
             <table className="table">

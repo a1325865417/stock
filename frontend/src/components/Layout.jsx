@@ -17,11 +17,15 @@ export default function Layout({ children }) {
   const { data: task } = useTask();
   const online = task?.online;
   const notice = task?.notice?.index?.banner || task?.notice?.index?.title;
+  const logo = task?.base?.logo || task?.soft?.logo;
+  const kefu = task?.kefu_pic;
 
   return (
     <div className="app">
       <aside className="sidebar">
-        <div className="logo">VIP复盘网</div>
+        <div className="logo">
+          {logo ? <img src={logo} alt="VIP复盘网" /> : "VIP复盘网"}
+        </div>
         <div className="user-card">
           <div className="user-title">VIP 1 · 打电话哈</div>
           <div className="user-line">ID：138518 · 余额：0 元</div>
@@ -68,6 +72,12 @@ export default function Layout({ children }) {
       </main>
 
       <div className="float-right">
+        {kefu && (
+          <div className="float-card">
+            <div className="float-card-title">专属客服</div>
+            <img src={kefu} alt="客服" />
+          </div>
+        )}
         <div className="float-btn">VIP</div>
         <div className="float-btn">通知</div>
         <div className="float-btn">客服</div>
