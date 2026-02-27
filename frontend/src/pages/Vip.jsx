@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useTask } from "../lib/task";
+import { useUser } from "../lib/user";
 
 const tabs = [
   "VIP商城",
@@ -41,6 +42,7 @@ const cardRows = [
 export default function Vip() {
   const [active, setActive] = useState(tabs[0]);
   const { data: task } = useTask();
+  const { data: user } = useUser();
   const promo = task?.youhui;
 
   return (
@@ -103,19 +105,19 @@ export default function Vip() {
           <div className="stat-grid">
             <div className="stat-card">
               <div className="stat-label">会员等级</div>
-              <div className="stat-value">VIP 1</div>
+              <div className="stat-value">{user?.vip_level || "VIP"}</div>
             </div>
             <div className="stat-card">
               <div className="stat-label">会员到期</div>
-              <div className="stat-value">2026-05-26</div>
+              <div className="stat-value">{user?.vip_days_left != null ? `${user.vip_days_left} 天` : "--"}</div>
             </div>
             <div className="stat-card">
               <div className="stat-label">策略卡次数</div>
-              <div className="stat-value">0 次</div>
+              <div className="stat-value">{user?.strategy_cards ?? 0} 次</div>
             </div>
             <div className="stat-card">
               <div className="stat-label">签到状态</div>
-              <div className="stat-value">未签到</div>
+              <div className="stat-value">{user?.signed_in ? "已签到" : "未签到"}</div>
             </div>
           </div>
         </div>

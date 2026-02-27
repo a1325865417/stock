@@ -2,6 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import { navItems } from "../lib/nav";
 import { useTask } from "../lib/task";
+import { useUser } from "../lib/user";
 
 function formatNow() {
   const now = new Date();
@@ -15,10 +16,13 @@ function formatNow() {
 
 export default function Layout({ children }) {
   const { data: task } = useTask();
+  const { data: user } = useUser();
   const online = task?.online;
   const notice = task?.notice?.index?.banner || task?.notice?.index?.title;
   const logo = task?.base?.logo || task?.soft?.logo;
   const kefu = task?.kefu_pic;
+  const balance = user?.balance != null ? `${user.balance} 元` : "0 元";
+  const vipDays = user?.vip_days_left != null ? `${user.vip_days_left} 天` : "--";
 
   return (
     <div className="app">
@@ -27,10 +31,19 @@ export default function Layout({ children }) {
           {logo ? <img src={logo} alt="VIP复盘网" /> : "VIP复盘网"}
         </div>
         <div className="user-card">
-          <div className="user-title">VIP 1 · 打电话哈</div>
-          <div className="user-line">ID：138518 · 余额：0 元</div>
-          <div className="user-line">签到：未签到 · 策略卡：0 次</div>
-          <div className="user-line">VIP软件：13 天 · 通达信：未参与</div>
+          <div className="user-title">
+            {user?.vip_level || "VIP"} · {user?.nickname || "游客"}
+          </div>
+          <div className="user-line">
+            ID：{user?.id ?? "--"} · 余额：{balance}
+          </div>
+          <div className="user-line">
+            签到：{user?.signed_in ? "已签到" : "未签到"} · 策略卡：
+            {user?.strategy_cards ?? 0} 次
+          </div>
+          <div className="user-line">
+            VIP软件：{vipDays} · 通达信：{user?.tdx_status || "未参与"}
+          </div>
           <div className="user-line">市场：交易中</div>
         </div>
         {navItems.map((item) => (
